@@ -1,0 +1,18 @@
+
+#posts-filter div.tablenav.top div.alignleft.actions select[name="m"],
+#posts-filter div.tablenav.top div.alignleft.actions #post-query-submit,
+#posts-filter div.tablenav.top div.alignleft.actions .ex-filter,
+#posts-filter div.tablenav.top div.alignleft.actions select[name="cat"]{
+    display: none;
+}
+
+#posts-filter div.tablenav.top div.alignleft.actions input.ex-filter{
+    width: 140px;
+}
+#posts-filter div.tablenav.top div.alignleft.actions select.ex-filter{
+    width: 150px;
+}
+
+#posts-filter div.tablenav.top div.alignleft.actions input.date-picker-input{
+    width: 80px;
+}
