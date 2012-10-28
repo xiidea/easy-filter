@@ -48,8 +48,7 @@ class Loader{
         extract($data,EXTR_SKIP);
         $view_file=$this->_absolute_path."/Views/{$view}.php";
         if(!file_exists($view_file)){
-            display_error('Request File Could not be found : '.$view_file);
-            return FALSE;
+            throw new \ErrorException('Request File Could not be found : '.$view_file);
         }
         if($return){
             ob_start();

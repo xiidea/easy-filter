@@ -11,28 +11,32 @@ class WP
     private static $_instance=NULL;
     private $_remove_default_filter=array();
     private $_filter_types=array(
-                                'month' => 'Month'
-                                ,'category' => 'Category Filter'
-                                ,'author' => 'Author'
-                                ,'date_range' => 'Date Range'
-                                ,'taxonomy' => 'Taxonomy'
-                        );
+        'month' => 'Month'
+    ,'category' => 'Category Filter'
+    ,'author' => 'Author'
+    ,'date_range' => 'Date Range'
+    ,'taxonomy' => 'Taxonomy'
+    );
 
     private $_plugin_domain='';
     private $_plugin_file='';
 
-    function __construct ( &$wpdb, $pagenow, $typenow = "", $plugin_file = "", $plugin_domain = "plugin_option" ){
-        $this->_db = &$wpdb;
-        $this->_pagenow = $pagenow;
-        $this->_typenow = $typenow === ""?'post':$typenow;;
-        $this->_plugin_domain = $plugin_domain;
+    function __construct ( $plugin_file = "", $globals){
         $this->_plugin_file = $plugin_file;
+        $this->_plugin_domain = EZ_FILTER_OPTION;
+        $this->_initGlobals($globals);
     }
+    private function _initGlobals( $global){
+        $this->_db = $global['wpdb'];
+        $this->_pagenow = $global['pagenow'];
+        $this->_typenow = $global['typenow'] === ""?'post':$global['typenow'];
+    }
+    public static function getInstance ($plugin_file = "", $global=array() ) {
 
-    public static function getInstance (&$db = NULL, $pagenow = "", $typenow = "", $plugin_file = "", $plugin_domain = "plugin_option" ) {
         if(!isset(self::$_instance)) {
-            self::$_instance = new WP ( $db, $pagenow, $typenow, $plugin_file, $plugin_domain );
+            self::$_instance = new WP ( $plugin_file, $plugin_domain );
         }
+        self::$_instance->_initGlobals($global);
         return self::$_instance;
     }
 
@@ -72,7 +76,7 @@ class WP
 
     public function getSettings($type=""){
         if(!$this->_settings){
-           $this->_settings=get_option($this->_plugin_domain);
+            $this->_settings=get_option($this->_plugin_domain);
         }
         if($type!=""){
             return isset($this->_settings[$type])?$this->_settings[$type]:array();
